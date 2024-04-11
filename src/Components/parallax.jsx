@@ -8,37 +8,52 @@ const Parallax = () => {
   const image3Ref = useRef(null);
   const image4Ref = useRef(null);
 
+
+
 useEffect(() => {
-
-  const tl = gsap.timeline({
-    defaults: { ease: "power1.in" },
-    repeat: -1, 
-    repeatDelay: 1,
-  });
-
-
-  const { x: firstX, y: firstY } = image1Ref.current.getBoundingClientRect();
-
-
-  [image1Ref, image2Ref, image3Ref, image4Ref].forEach((imgRef, index) => {
-
+    const tl = gsap.timeline({
+      defaults: { ease: "power1.in" },
+      repeat: -1,
+      repeatDelay: 0,
+    });
   
 
-    tl.to(imgRef.current, {
-      x: firstX - imgRef.current.offsetLeft,
-      y: firstY - imgRef.current.offsetTop,
-      duration: 1,
-      delay: index * 0.3
-    })
-    .to(imgRef.current, {
-      y: "+=300",
-      x: "+=250", 
-      opacity: 0,
-      scale: 0.5,
-      duration: 2,
-    }, "=-0.5"); 
-  });
-}, []);
+    const { x: firstX, y: firstY } = image1Ref.current.getBoundingClientRect();
+  
+
+    const imageRefs = [image1Ref, image2Ref, image3Ref, image4Ref];
+  
+
+    const offsets = imageRefs.map(imgRef => {
+      const { left, top } = imgRef.current.getBoundingClientRect();
+      return { x: firstX - left, y: firstY - top };
+    });
+  
+
+    const staggerDuration = 0.4;
+  
+
+    imageRefs.forEach((imgRef, index) => {
+      const startTime = staggerDuration * index;
+  
+
+      tl.to(imgRef.current, {
+        x: `+=${offsets[index].x}`,
+        y: `+=${offsets[index].y}`,
+        duration: 3,
+      }, startTime)
+      .to(imgRef.current, {  
+        y: "+=300",  
+        x: "+=250",  
+        opacity: 0,
+        scale: 0.5,
+        duration: 2,
+      }, startTime + 3);  
+    });
+  }, []);
+  
+  
+  
 
   return (
     <>
