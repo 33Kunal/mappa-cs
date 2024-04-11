@@ -12,47 +12,42 @@ const Parallax = () => {
 
 useEffect(() => {
     const tl = gsap.timeline({
-      defaults: { ease: "power1.in" },
-      repeat: -1,
-      repeatDelay: 0,
+        defaults: { ease: "power1.in" },
+        repeat: -1,
+        repeatDelay: 0,
     });
-  
 
     const { x: firstX, y: firstY } = image1Ref.current.getBoundingClientRect();
-  
 
     const imageRefs = [image1Ref, image2Ref, image3Ref, image4Ref];
-  
 
     const offsets = imageRefs.map(imgRef => {
-      const { left, top } = imgRef.current.getBoundingClientRect();
-      return { x: firstX - left, y: firstY - top };
+        const { left, top } = imgRef.current.getBoundingClientRect();
+        return { x: firstX - left, y: firstY - top };
     });
-  
 
-    const staggerDuration = 0.4;
-  
+    const staggerDuration = 1; 
 
     imageRefs.forEach((imgRef, index) => {
-      const startTime = staggerDuration * index;
-  
+        const startTime = staggerDuration * index;
 
-      tl.to(imgRef.current, {
-        x: `+=${offsets[index].x}`,
-        y: `+=${offsets[index].y}`,
-        duration: 3,
-      }, startTime)
-      .to(imgRef.current, {  
-        y: "+=300",  
-        x: "+=250",  
-        opacity: 0,
-        scale: 0.5,
-        duration: 2,
-      }, startTime + 3);  
+
+        tl.to(imgRef.current, {
+            x: `+=${offsets[index].x}`,
+            y: `+=${offsets[index].y}`,
+            duration: 3,
+        }, startTime)
+      
+        .to(imgRef.current, {  
+            y: "+=300",  
+            x: "+=250",  
+            opacity: 0,
+            scale: 0.5,
+            duration: 2,
+        }, `>+=${ 0.2 * index}`); 
     });
-  }, []);
-  
-  
+}, []);
+
   
 
   return (
@@ -100,3 +95,42 @@ useEffect(() => {
 };
 
 export default Parallax;
+
+//initial code to keep 
+// useEffect(() => {
+
+//   const tl = gsap.timeline({
+//     defaults: { ease: "power1.in" },
+//     repeat: -1, 
+//     repeatDelay: 1,
+//   });
+
+
+//   const { x: firstX, y: firstY } = image1Ref.current.getBoundingClientRect();
+
+//   tl.to([image1Ref, image2Ref, image3Ref, image4Ref], {
+//     x: () => firstX - image1Ref.current.getBoundingClientRect().x,
+//     y: () => firstY - image1Ref.current.getBoundingClientRect().y,
+//     duration: 1, // Duration of the animation in seconds
+//   });
+
+//   [image1Ref, image2Ref, image3Ref, image4Ref].forEach((imgRef, index) => {
+
+  
+    
+//     tl.to(imgRef.current, {
+//       x: firstX - imgRef.current.offsetLeft,
+//       y: firstY - imgRef.current.offsetTop,
+//       duration: 1,
+//       delay: index * 0.3
+//     })
+
+//     tl.to(imgRef.current, {
+//       y: "+=300",
+//       x: "+=250", 
+//       opacity: 0,
+//       scale: 0.5,
+//       duration: 2,
+//     }, "=-0.5"); 
+//   });
+// }, []);
